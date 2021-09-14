@@ -1,0 +1,44 @@
+root@76f6684ce485:/# hive
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/local/apache-hive-3.1.2-bin/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop-3.3.1/share/hadoop/common/lib/slf4j-log4j12-1.7.30.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Hive Session ID = 42b21132-5dcf-4ae1-935e-a3ef5b25f6dc
+
+Logging initialized using configuration in jar:file:/usr/local/apache-hive-3.1.2-bin/lib/hive-common-3.1.2.jar!/hive-log4j2.properties Async: true
+Hive Session ID = 7c8c7103-e9d5-48b2-8795-cacf9c37acd2
+Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+hive> CREATE TABLE EPISODEIV (name STRING, line STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' TBLPROPERTIES ("skip.header.line.count"="2");
+OK
+Time taken: 2.912 seconds
+hive> LOAD DATA LOCAL INPATH '/episodeIV_dialogues.txt' INTO TABLE EPISODEIV;
+Loading data to table default.episodeiv
+OK
+Time taken: 2.561 seconds
+hive> SELECT COUNT(*) from EPISODEIV where INSTR(line, 'Luke')>0;
+Query ID = root_20210914140311_666f39cf-8f77-4e67-aa4c-b280f36c6271
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1631627712706_0001, Tracking URL = http://76f6684ce485:8088/proxy/application_1631627712706_0001/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1631627712706_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2021-09-14 14:03:35,264 Stage-1 map = 0%,  reduce = 0%
+2021-09-14 14:03:44,962 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 9.53 sec
+2021-09-14 14:03:54,566 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 16.72 sec
+MapReduce Total cumulative CPU time: 16 seconds 720 msec
+Ended Job = job_1631627712706_0001
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 16.72 sec   HDFS Read: 81899 HDFS Write: 102 SUCCESS
+Total MapReduce CPU Time Spent: 16 seconds 720 msec
+OK
+56
+Time taken: 45.436 seconds, Fetched: 1 row(s)
+hive>
