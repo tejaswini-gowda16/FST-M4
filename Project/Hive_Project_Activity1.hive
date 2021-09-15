@@ -1,0 +1,11 @@
+hive> CREATE TABLE EPISODEIV (name STRING, line STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' TBLPROPERTIES ("skip.header.line.count"="2");
+hive> LOAD DATA LOCAL INPATH '/episodeIV_dialogues.txt' INTO TABLE EPISODEIV;
+hive> SELECT name, COUNT(name) AS no_of_lines from EPISODEIV GROUP BY name ORDER BY no_of_lines;
+
+hive> CREATE TABLE EPISODEV (name STRING, line STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' TBLPROPERTIES ("skip.header.line.count"="2");
+hive> LOAD DATA LOCAL INPATH '/episodeV_dialogues.txt' INTO TABLE EPISODEV;
+hive> SELECT name, COUNT(name) AS no_of_lines from EPISODEV GROUP BY name ORDER BY no_of_lines;
+
+hive> CREATE TABLE EPISODEVI (name STRING, line STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' TBLPROPERTIES ("skip.header.line.count"="2");
+hive> LOAD DATA LOCAL INPATH '/episodeVI_dialogues.txt' INTO TABLE EPISODEVI;
+hive> SELECT name, COUNT(name) AS no_of_lines from EPISODEVI GROUP BY name ORDER BY no_of_lines;
