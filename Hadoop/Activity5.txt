@@ -1,0 +1,201 @@
+root@45140538120a:/# clear
+root@45140538120a:/# vim EmpData.csv
+root@45140538120a:/# cat EmpData.csv
+ID,Name,Department,JoinDate,Salary
+1,Ian,Quality Assurance,2021,28113
+2,Beatrice,Tech Support,2021,35330
+3,Vladimir,Human Resources,2020,51445
+4,Whitney,IT,2020,23818
+5,Leslie,Customer Service,2021,59882
+6,Bernard,IT,2021,50330
+7,Mary,Customer Service,2021,26558
+8,Jerome,RnD,2021,45333
+9,Joshua,IT,2021,59538
+10,Keane,Human Resources,2022,46500
+11,Velma,Human Resources,2022,19816
+12,Rogan,Tech Support,2022,27554
+13,Aurelia,RnD,2021,20762
+14,Merrill,Quality Assurance,2021,59660
+15,Blaine,Tech Support,2022,28768
+root@45140538120a:/# hive
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/local/apache-hive-3.1.2-bin/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop-3.3.1/share/hadoop/common/lib/slf4j-log4j12-1.7.30.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Hive Session ID = d439dc6b-8cda-4cfc-b4a7-dfedc86f3340
+
+Logging initialized using configuration in jar:file:/usr/local/apache-hive-3.1.2-bin/lib/hive-common-3.1.2.jar!/hive-log4j2.properties Async: true
+Hive Session ID = f71cbad4-020f-440e-bf92-27631c2b7276
+Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+hive> show databases;
+OK
+default
+Time taken: 1.169 seconds, Fetched: 1 row(s)
+hive> create database office;
+OK
+Time taken: 0.284 seconds
+hive> use office;
+OK
+Time taken: 0.044 seconds
+hive> CREATE TABLE employee
+    > (id INT, name STRING, dept STRING, yoj INT, salary INT)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > TBLPROPERTIES ("skip.header.line.count"="1");
+OK
+Time taken: 0.944 seconds
+hive> DESCRIBE employee;
+OK
+id                      int
+name                    string
+dept                    string
+yoj                     int
+salary                  int
+Time taken: 0.313 seconds, Fetched: 5 row(s)
+hive> LOAD DATA LOCAL INPATH
+    > '/EmpData.csv'
+    > INTO TABLE employee;
+Loading data to table office.employee
+OK
+Time taken: 0.815 seconds
+hive> SELECT * FROM employee;
+OK
+1       Ian     Quality Assurance       2021    28113
+2       Beatrice        Tech Support    2021    35330
+3       Vladimir        Human Resources 2020    51445
+4       Whitney IT      2020    23818
+5       Leslie  Customer Service        2021    59882
+6       Bernard IT      2021    50330
+7       Mary    Customer Service        2021    26558
+8       Jerome  RnD     2021    45333
+9       Joshua  IT      2021    59538
+10      Keane   Human Resources 2022    46500
+11      Velma   Human Resources 2022    19816
+12      Rogan   Tech Support    2022    27554
+13      Aurelia RnD     2021    20762
+14      Merrill Quality Assurance       2021    59660
+15      Blaine  Tech Support    2022    28768
+Time taken: 2.886 seconds, Fetched: 15 row(s)
+hive> SELECT COUNT(*) FROM employee;
+Query ID = root_20210909063240_137f6fe2-8b28-4cff-a0c1-adae7e2e3dc4
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1631168587408_0001, Tracking URL = http://45140538120a:8088/proxy/application_1631168587408_0001/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1631168587408_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2021-09-09 06:32:58,806 Stage-1 map = 0%,  reduce = 0%
+2021-09-09 06:33:06,297 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.83 sec
+2021-09-09 06:33:14,945 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 12.76 sec
+MapReduce Total cumulative CPU time: 12 seconds 760 msec
+Ended Job = job_1631168587408_0001
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 12.76 sec   HDFS Read: 13143 HDFS Write: 102 SUCCESS
+Total MapReduce CPU Time Spent: 12 seconds 760 msec
+OK
+15
+Time taken: 35.523 seconds, Fetched: 1 row(s)
+hive> SELECT  id, name FROM employee;
+OK
+1       Ian
+2       Beatrice
+3       Vladimir
+4       Whitney
+5       Leslie
+6       Bernard
+7       Mary
+8       Jerome
+9       Joshua
+10      Keane
+11      Velma
+12      Rogan
+13      Aurelia
+14      Merrill
+15      Blaine
+Time taken: 0.269 seconds, Fetched: 15 row(s)
+hive> SELECT * FROM employee WHERE salary > 30000;
+OK
+2       Beatrice        Tech Support    2021    35330
+3       Vladimir        Human Resources 2020    51445
+5       Leslie  Customer Service        2021    59882
+6       Bernard IT      2021    50330
+8       Jerome  RnD     2021    45333
+9       Joshua  IT      2021    59538
+10      Keane   Human Resources 2022    46500
+14      Merrill Quality Assurance       2021    59660
+Time taken: 0.344 seconds, Fetched: 8 row(s)
+hive> INSERT OVERWRITE DIRECTORY '/user/root/output/export'
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > SELECT * FROM employee;
+Query ID = root_20210909063619_c8e56337-8141-4e40-a54c-d2a004bda3f3
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1631168587408_0002, Tracking URL = http://45140538120a:8088/proxy/application_1631168587408_0002/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1631168587408_0002
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2021-09-09 06:36:33,766 Stage-1 map = 0%,  reduce = 0%
+2021-09-09 06:36:42,328 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.95 sec
+MapReduce Total cumulative CPU time: 5 seconds 950 msec
+Ended Job = job_1631168587408_0002
+Stage-3 is selected by condition resolver.
+Stage-2 is filtered out by condition resolver.
+Stage-4 is filtered out by condition resolver.
+Moving data to directory hdfs://45140538120a:9000/user/root/output/export/.hive-staging_hive_2021-09-09_06-36-19_109_6013511249148192929-1/-ext-10000
+Moving data to directory /user/root/output/export
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1   Cumulative CPU: 5.95 sec   HDFS Read: 5662 HDFS Write: 480 SUCCESS
+Total MapReduce CPU Time Spent: 5 seconds 950 msec
+OK
+Time taken: 25.455 seconds
+hive> dfs -ls /user/root/output/export
+    > ;
+Found 1 items
+-rw-r--r--   1 root supergroup        480 2021-09-09 06:36 /user/root/output/export/000000_0
+hive> INSERT OVERWRITE LOCAL DIRECTORY '/export'
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    > SELECT * FROM employee;
+Query ID = root_20210909063825_1762eda4-5cda-4d03-9a9f-560458a16846
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1631168587408_0003, Tracking URL = http://45140538120a:8088/proxy/application_1631168587408_0003/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1631168587408_0003
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2021-09-09 06:38:39,692 Stage-1 map = 0%,  reduce = 0%
+2021-09-09 06:38:48,130 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 4.62 sec
+MapReduce Total cumulative CPU time: 4 seconds 620 msec
+Ended Job = job_1631168587408_0003
+Moving data to local directory /export
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1   Cumulative CPU: 4.62 sec   HDFS Read: 5652 HDFS Write: 480 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 620 msec
+OK
+Time taken: 23.712 seconds
+hive> quit;
+root@45140538120a:/# ls
+
+root@45140538120a:/# cat export/000000_0 > output.csv
+
+1,Ian,Quality Assurance,2021,28113
+2,Beatrice,Tech Support,2021,35330
+3,Vladimir,Human Resources,2020,51445
+4,Whitney,IT,2020,23818
+5,Leslie,Customer Service,2021,59882
+6,Bernard,IT,2021,50330
+7,Mary,Customer Service,2021,26558
+8,Jerome,RnD,2021,45333
+9,Joshua,IT,2021,59538
+10,Keane,Human Resources,2022,46500
+11,Velma,Human Resources,2022,19816
+12,Rogan,Tech Support,2022,27554
+13,Aurelia,RnD,2021,20762
+14,Merrill,Quality Assurance,2021,59660
+15,Blaine,Tech Support,2022,28768
+~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            ~                                                                                                                                                                                            "output.csv" 15L, 480C
